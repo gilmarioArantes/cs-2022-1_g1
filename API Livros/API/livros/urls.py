@@ -45,14 +45,14 @@ editar_autor = AutorViewSet.as_view({
 
 urlpatterns = [
    path('livros/', listar_livros, name='listar-livros'),
-   path('adicionar_livro/', adicionar_livro, name='adicionar-livro'),
+   path('adicionar-livro/', adicionar_livro, name='adicionar-livro'),
    path('livros/<uuid:pk>/', retornar_livro, name='retornar-livro'),
-   path('deletar_livro/<uuid:pk>/', deletar_livro, name='deletar-livro'),
-   path('editar_livro/<uuid:pk>/', editar_livro, name='editar-livro'),
+   path('deletar-livro/<uuid:pk>/', deletar_livro, name='deletar-livro'),
+   path('editar-livro/<uuid:pk>/', editar_livro, name='editar-livro'),
    path('autores/', listar_autores, name='listar-autores'),
-   path('adicionar_autor/', adicionar_autor, name='adicionar-autor'),
+   path('adicionar-autor/', adicionar_autor, name='adicionar-autor'),
    path('autores/<uuid:pk>/', retornar_autor, name='retornar-autor'),
-   path('deletar_autor/<uuid:pk>/', deletar_autor, name='deletar-autor'),
-   path('editar_autor/<uuid:pk>/', editar_autor, name='editar-autor'),
+   path('deletar-autor/<uuid:pk>/', deletar_autor, name='deletar-autor'),
+   path('editar-autor/<uuid:pk>/', editar_autor, name='editar-autor'),
    path('uploads/thumbnails/<str:filename>/', load_file, name='load-file'),
 ]

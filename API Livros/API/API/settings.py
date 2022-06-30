@@ -36,7 +36,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(",")
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'livros.apps.LivrosConfig',
+    'autenticacao.apps.AutenticacaoConfig',
 ]
 
 MIDDLEWARE = [

@@ -6,11 +6,18 @@ from django.http.response import HttpResponse
 from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import PermissionDenied
-
+from rest_framework.response import Response
+from rest_framework import status
 
 class LivroViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Livro.objects.all()
     serializer_class = LivroSerializer
+
+    def get_permissions(self):
+        if self.action == "list" or self.action == "retrieve":
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
 
     def create(self, request, *args, **kwargs):
         if request.user.is_superuser:
@@ -19,6 +26,14 @@ class LivroViewSet(viewsets.ModelViewSet):
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        else:
+            raise PermissionDenied()
+
+    def destroy(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            instance = self.get_object()
+            self.perform_destroy(instance)
+            return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             raise PermissionDenied()
 
@@ -33,18 +48,7 @@ class LivroViewSet(viewsets.ModelViewSet):
         else:
             raise PermissionDenied()
 
-    def destroy(self, request, *args, **kwargs):
-        if request.user.is_superuser:
-            instance = self.get_object()
-            self.perform_destroy(instance)
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
-            raise PermissionDenied()
 
-    def get_permissions(self):
-        if self.action == "list" or self.action == "retrieve":
-            return [permissions.AllowAny()]
-        return [permissions.IsAuthenticated()]
 
 class AutorViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -68,7 +72,7 @@ class AutorViewSet(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            partial = kwargs.pop('partial', False)
+            partial = True
             instance = self.get_object()
             serializer = self.get_serializer(instance, data=request.data, partial=partial)
             serializer.is_valid(raise_exception=True)
