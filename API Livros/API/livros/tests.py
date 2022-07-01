@@ -9,7 +9,7 @@ import requests
 from django.contrib.auth.models import User
 
 
-"""class AutorTestCase(TestCase):
+class AutorTestCase(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.autor = Autor.objects.create(
@@ -120,7 +120,7 @@ from django.contrib.auth.models import User
         view = AutorViewSet.as_view({'get': 'retrieve'})
         request = self.factory.get(f'/autores/{self.autor.pk}/', format="json")
         response = make_request(view, request,pk = self.autor.pk)
-        self.assertTrue(response['status_code'] == 200)"""
+        self.assertTrue(response['status_code'] == 200)
 
 class LivroTestCase(TestCase):
     def setUp(self):
