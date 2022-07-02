@@ -41,15 +41,17 @@ Desenvolvimento de uma API REST para gerenciamento de livros em uma biblioteca. 
 
 ### ***Local de deploy***:
 
+> Servidor local dos integrantes: http://livraria.ddns.net:8000
+
 ### Participantes:
 
 |#|Nome|Usuário|Papel|
 |---|---|---|---|
-|1|ADRIEL LENNER VINHAL MORI|[adrielmori](https://github.com/adrielmori)|Líder|
-|2|GABRIEL PIRES DE CAMPOS REZENDE|[Gabriel-Rezende](https://github.com/Gabriel-Rezende)|   |
-|3|KARLOS DANIEL PIRES DA SILVA|[karlosdaniel451](https://github.com/karlosdaniel451)|   |
-|4|NATHAN LUIS COELHO CAMPOS|[NathanCamposss](https://github.com/NathanCamposss)|   |
-|5|PAULO ROBERTO VIEIRA|[PauloRobertoVieira](https://github.com/PauloRobertoVieira)|   |
+|1|ADRIEL LENNER VINHAL MORI|[adrielmori](https://github.com/adrielmori)| Líder - 3. Buscar Populares |
+|2|GABRIEL PIRES DE CAMPOS REZENDE|[Gabriel-Rezende](https://github.com/Gabriel-Rezende)|  1. Login  |
+|3|KARLOS DANIEL PIRES DA SILVA|[karlosdaniel451](https://github.com/karlosdaniel451)|  5. Visualizar dados dos favoritos  |
+|4|NATHAN LUIS COELHO CAMPOS|[NathanCamposss](https://github.com/NathanCamposss)|  4. Ocultar visualização  |
+|5|PAULO ROBERTO VIEIRA|[PauloRobertoVieira](https://github.com/PauloRobertoVieira)|  2. Favoritos  |
 
 
 ### Cronograma:
