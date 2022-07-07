@@ -1,6 +1,8 @@
 import base64
 from rest_framework import viewsets
 from livros.serializers import AutorSerializer, LivroAdminSerializer, LivroSerializer
+
+from livros.serializers import LivroSerializer, AutorSerializer
 from livros.models import Livro, Autor
 from django.http.response import HttpResponse
 from rest_framework import permissions
@@ -37,6 +39,12 @@ class LivroViewSet(viewsets.ModelViewSet):
         if isinstance(queryset, QuerySet):
             queryset = queryset.all()
         return queryset
+
+
+class LivroViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = Livro.objects.all()
+    serializer_class = LivroSerializer
 
     def get_permissions(self):
         if self.action == "list" or self.action == "retrieve":

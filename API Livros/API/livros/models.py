@@ -29,6 +29,7 @@ class Livro(models.Model):
     autores = models.ManyToManyField(Autor, blank=True, verbose_name="Autor", related_name='livros_autor')
     visibilidade = models.BooleanField(default=True, blank=True)
 
+
     ESCOLHAS_CATEGORIA = [
         ('Ação e aventura', 'Ação e aventura'),
         ('Ficção afro-americana', 'Ficção afro-americana'),

@@ -9,10 +9,12 @@ class LivroAdminSerializer(serializers.ModelSerializer):
        fields = '__all__'
 
 
+
 class LivroSerializer(serializers.ModelSerializer):
 
    class Meta:
        model = Livro
+
        fields = [
                     'id',
                     'titulo',
@@ -24,7 +26,8 @@ class LivroSerializer(serializers.ModelSerializer):
                     'categorias',
                     'autores',
                 ]
-       
+
+
 
 class AutorSerializer(serializers.ModelSerializer):
 
