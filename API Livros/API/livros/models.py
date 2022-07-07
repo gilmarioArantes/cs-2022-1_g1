@@ -27,6 +27,8 @@ class Livro(models.Model):
     thumbnail = models.ImageField(upload_to='uploads/thumbnails/')
     local_publicacao = models.CharField(max_length=200)
     autores = models.ManyToManyField(Autor, blank=True, verbose_name="Autor", related_name='livros_autor')
+    visibilidade = models.BooleanField(default=True, blank=True)
+
 
     ESCOLHAS_CATEGORIA = [
         ('Ação e aventura', 'Ação e aventura'),

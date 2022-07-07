@@ -136,6 +136,23 @@ class LivroTestCase(TestCase):
                                     numero_paginas=200,
                                     data_publicacao="2022-06-30",
                                     descricao="O melhor livro de Teste do Brasil",
+
+                                    local_publicacao="Brasil",
+                                    categorias=['Crime Verdadeiro', 'Tecnologia']
+                                )
+
+        self.livro_oculto = Livro.objects.create(
+                                    titulo="Livro Oculto",
+                                    numero_paginas=300,
+                                    data_publicacao="2022-07-06",
+                                    descricao="O livro mais oculto do mundo",
+                                    local_publicacao="Estados Unidos da América",
+                                    categorias=['Crime Verdadeiro'],
+                                    visibilidade=False
+                                )
+
+        self.livro.autores.set([self.autor])
+        self.livro_oculto.autores.set([self.autor])
                                     #thumbnail=open("teste.jpg", "rb"),
                                     local_publicacao="Brasil",
                                     categorias=['Crime Verdadeiro', 'Tecnologia']
@@ -276,6 +293,49 @@ class LivroTestCase(TestCase):
         request = self.factory.get(f'/livros/{self.livro.id}/', format="json")
         response = make_request(view, request, pk= self.livro.id)
         self.assertTrue(response['status_code'] == 200)
+
+    def test_admin_get_livros_oculto(self):
+        view = LivroViewSet.as_view({'get': 'list'})
+        request = self.factory.get('/livros/', format="json")
+        response = make_request(view, request, self.administrador)
+        can_see_oculto = False
+        for i in response['content']:
+            if i['titulo'] == 'Livro Oculto':
+                can_see_oculto = True
+        self.assertTrue(can_see_oculto)
+
+    def test_user_get_livros_oculto(self):
+        view = LivroViewSet.as_view({'get': 'list'})
+        request = self.factory.get('/livros/', format="json")
+        response = make_request(view, request, self.usuario_comum)
+        for i in response['content']:
+            self.assertFalse(i['titulo'] == 'Livro Oculto')
+
+    def test_visitante_get_livros_oculto(self):
+        view = LivroViewSet.as_view({'get': 'list'})
+        request = self.factory.get('/livros/', format="json")
+        response = make_request(view, request)
+        for i in response['content']:
+            self.assertFalse(i['titulo'] == 'Livro Oculto')
+
+    def test_admin_retrieve_livro_oculto(self):
+        view = LivroViewSet.as_view({'get': 'retrieve'})
+        request = self.factory.get(f'/livros/{self.livro_oculto.id}/', format="json")
+        response = make_request(view, request, self.administrador, self.livro_oculto.id)
+        self.assertTrue(response['status_code'] == 200)
+
+    def test_user_retrieve_livro_oculto(self):
+        view = LivroViewSet.as_view({'get': 'retrieve'})
+        request = self.factory.get(f'/livros/{self.livro_oculto.id}/', format="json")
+        response = make_request(view, request, self.usuario_comum, self.livro_oculto.id)
+        self.assertTrue(response['status_code'] == 404)
+
+    def test_visitante_retrieve_livro_oculto(self):
+        view = LivroViewSet.as_view({'get': 'retrieve'})
+        request = self.factory.get(f'/livros/{self.livro_oculto.id}/', format="json")
+        response = make_request(view, request, pk=self.livro_oculto.id)
+        self.assertTrue(response['status_code'] == 404)
+
 
 def make_request(view, request, user=None, pk=None):
     if user:

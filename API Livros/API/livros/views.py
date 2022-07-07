@@ -1,5 +1,7 @@
 import base64
 from rest_framework import viewsets
+from livros.serializers import AutorSerializer, LivroAdminSerializer, LivroSerializer
+
 from livros.serializers import LivroSerializer, AutorSerializer
 from livros.models import Livro, Autor
 from django.http.response import HttpResponse
@@ -8,6 +10,36 @@ from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework import status
+from django.db.models.query import QuerySet
+
+class LivroViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = LivroSerializer
+    queryset = Livro.objects.all()
+    
+    def get_serializer(self, *args, **kwargs):
+        if self.request.user.is_superuser:
+            serializer_class = LivroAdminSerializer
+        else:
+            serializer_class = self.get_serializer_class()
+        kwargs['context'] = self.get_serializer_context()
+        return serializer_class(*args, **kwargs)
+
+    def get_queryset(self):
+        assert self.queryset is not None, (
+            "'%s' should either include a `queryset` attribute, "
+            "or override the `get_queryset()` method."
+            % self.__class__.__name__
+        )
+
+        if self.request.user.is_superuser:
+            queryset = self.queryset
+        else:
+            queryset = self.queryset.filter(visibilidade=True)
+        if isinstance(queryset, QuerySet):
+            queryset = queryset.all()
+        return queryset
+
 
 class LivroViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
