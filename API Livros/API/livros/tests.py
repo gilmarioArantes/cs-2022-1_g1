@@ -136,7 +136,6 @@ class LivroTestCase(TestCase):
                                     numero_paginas=200,
                                     data_publicacao="2022-06-30",
                                     descricao="O melhor livro de Teste do Brasil",
-
                                     local_publicacao="Brasil",
                                     categorias=['Crime Verdadeiro', 'Tecnologia']
                                 )
@@ -153,11 +152,6 @@ class LivroTestCase(TestCase):
 
         self.livro.autores.set([self.autor])
         self.livro_oculto.autores.set([self.autor])
-                                    #thumbnail=open("teste.jpg", "rb"),
-                                    local_publicacao="Brasil",
-                                    categorias=['Crime Verdadeiro', 'Tecnologia']
-                                )
-        self.livro.autores.set([self.autor])
 
         self.administrador = User.objects.create_user(
                                         username="administrador",
@@ -335,7 +329,6 @@ class LivroTestCase(TestCase):
         request = self.factory.get(f'/livros/{self.livro_oculto.id}/', format="json")
         response = make_request(view, request, pk=self.livro_oculto.id)
         self.assertTrue(response['status_code'] == 404)
-
 
 def make_request(view, request, user=None, pk=None):
     if user:
