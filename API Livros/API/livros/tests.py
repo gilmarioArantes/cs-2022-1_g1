@@ -153,11 +153,6 @@ class LivroTestCase(TestCase):
 
         self.livro.autores.set([self.autor])
         self.livro_oculto.autores.set([self.autor])
-                                    #thumbnail=open("teste.jpg", "rb"),
-                                    local_publicacao="Brasil",
-                                    categorias=['Crime Verdadeiro', 'Tecnologia']
-                                )
-        self.livro.autores.set([self.autor])
 
         self.administrador = User.objects.create_user(
                                         username="administrador",
@@ -335,6 +330,124 @@ class LivroTestCase(TestCase):
         request = self.factory.get(f'/livros/{self.livro_oculto.id}/', format="json")
         response = make_request(view, request, pk=self.livro_oculto.id)
         self.assertTrue(response['status_code'] == 404)
+
+    def test_admin_favoritos(self):
+        view = LivroViewSet.as_view({'put': 'favoritar'})
+        request = self.factory.put(f'/livros/favoritar/{self.livro.id}/')
+        response = make_request(view, request, self.administrador, self.livro.id)
+        self.assertTrue(response['status_code'] == 200)
+
+        view = LivroViewSet.as_view({'get': 'listar_favoritos'})
+        request = self.factory.get(f'/livros/favoritos/', format="json")
+        response = make_request(view, request, self.administrador)
+        self.assertTrue(response['status_code'] == 200)
+        self.assertTrue(len(response['content']) == 1)
+
+        view = LivroViewSet.as_view({'put': 'desfavoritar'})
+        request = self.factory.put(f'/livros/desfavoritar/{self.livro.id}/')
+        response = make_request(view, request, self.administrador, self.livro.id)
+        self.assertTrue(response['status_code'] == 200)
+
+        view = LivroViewSet.as_view({'get': 'listar_favoritos'})
+        request = self.factory.get(f'/livros/favoritos/', format="json")
+        response = make_request(view, request, self.administrador)
+        self.assertTrue(response['status_code'] == 200)
+        self.assertTrue(len(response['content']) == 0)
+
+    def test_user_favoritos(self):
+        view = LivroViewSet.as_view({'put': 'favoritar'})
+        request = self.factory.put(f'/livros/favoritar/{self.livro.id}/')
+        response = make_request(view, request, self.usuario_comum, self.livro.id)
+        self.assertTrue(response['status_code'] == 200)
+
+        view = LivroViewSet.as_view({'get': 'listar_favoritos'})
+        request = self.factory.get(f'/livros/favoritos/', format="json")
+        response = make_request(view, request, self.usuario_comum)
+        self.assertTrue(response['status_code'] == 200)
+        self.assertTrue(len(response['content']) == 1)
+
+        view = LivroViewSet.as_view({'put': 'desfavoritar'})
+        request = self.factory.put(f'/livros/desfavoritar/{self.livro.id}/')
+        response = make_request(view, request, self.usuario_comum, self.livro.id)
+        self.assertTrue(response['status_code'] == 200)
+
+        view = LivroViewSet.as_view({'get': 'listar_favoritos'})
+        request = self.factory.get(f'/livros/favoritos/', format="json")
+        response = make_request(view, request, self.usuario_comum)
+        self.assertTrue(response['status_code'] == 200)
+        self.assertTrue(len(response['content']) == 0)
+
+    def test_visitante_favoritos(self):
+        view = LivroViewSet.as_view({'put': 'favoritar'})
+        request = self.factory.put(f'/livros/favoritar/{self.livro.id}/')
+        response = make_request(view, request, pk=self.livro.id)
+        self.assertTrue(response['status_code'] == 401)
+
+        view = LivroViewSet.as_view({'get': 'listar_favoritos'})
+        request = self.factory.get(f'/livros/favoritos/', format="json")
+        response = make_request(view, request)
+        self.assertTrue(response['status_code'] == 401)
+
+        view = LivroViewSet.as_view({'put': 'desfavoritar'})
+        request = self.factory.put(f'/livros/desfavoritar/{self.livro.id}/')
+        response = make_request(view, request, pk=self.livro.id)
+        self.assertTrue(response['status_code'] == 401)
+
+    def test_admin_favoritos_oculto(self):
+        view = LivroViewSet.as_view({'put': 'favoritar'})
+        request = self.factory.put(f'/livros/favoritar/{self.livro.id}/')
+        response = make_request(view, request, self.administrador, self.livro_oculto.id)
+        self.assertTrue(response['status_code'] == 200)
+
+        view = LivroViewSet.as_view({'get': 'listar_favoritos'})
+        request = self.factory.get(f'/livros/favoritos/', format="json")
+        response = make_request(view, request, self.administrador)
+        self.assertTrue(response['status_code'] == 200)
+        self.assertTrue(len(response['content']) == 1)
+
+        view = LivroViewSet.as_view({'put': 'desfavoritar'})
+        request = self.factory.put(f'/livros/desfavoritar/{self.livro.id}/')
+        response = make_request(view, request, self.administrador, self.livro_oculto.id)
+        self.assertTrue(response['status_code'] == 200)
+
+        view = LivroViewSet.as_view({'get': 'listar_favoritos'})
+        request = self.factory.get(f'/livros/favoritos/', format="json")
+        response = make_request(view, request, self.administrador)
+        self.assertTrue(response['status_code'] == 200)
+        self.assertTrue(len(response['content']) == 0)
+
+    def test_user_favoritos_oculto(self):
+        view = LivroViewSet.as_view({'put': 'favoritar'})
+        request = self.factory.put(f'/livros/favoritar/{self.livro.id}/')
+        response = make_request(view, request, self.usuario_comum, self.livro_oculto.id)
+        self.assertTrue(response['status_code'] == 404)
+
+        view = LivroViewSet.as_view({'get': 'listar_favoritos'})
+        request = self.factory.get(f'/livros/favoritos/', format="json")
+        response = make_request(view, request, self.usuario_comum)
+        self.assertTrue(response['status_code'] == 200)
+        self.assertTrue(len(response['content']) == 0)
+
+        view = LivroViewSet.as_view({'put': 'desfavoritar'})
+        request = self.factory.put(f'/livros/desfavoritar/{self.livro.id}/')
+        response = make_request(view, request, self.usuario_comum, self.livro_oculto.id)
+        self.assertTrue(response['status_code'] == 404)
+
+    def test_visitante_favoritos_oculto(self):
+        view = LivroViewSet.as_view({'put': 'favoritar'})
+        request = self.factory.put(f'/livros/favoritar/{self.livro_oculto.id}/')
+        response = make_request(view, request, pk=self.livro.id)
+        self.assertTrue(response['status_code'] == 401)
+
+        view = LivroViewSet.as_view({'get': 'listar_favoritos'})
+        request = self.factory.get(f'/livros/favoritos/', format="json")
+        response = make_request(view, request)
+        self.assertTrue(response['status_code'] == 401)
+
+        view = LivroViewSet.as_view({'put': 'desfavoritar'})
+        request = self.factory.put(f'/livros/desfavoritar/{self.livro_oculto.id}/')
+        response = make_request(view, request, pk=self.livro.id)
+        self.assertTrue(response['status_code'] == 401)
 
 
 def make_request(view, request, user=None, pk=None):

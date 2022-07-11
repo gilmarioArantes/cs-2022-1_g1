@@ -28,6 +28,7 @@ class Livro(models.Model):
     local_publicacao = models.CharField(max_length=200)
     autores = models.ManyToManyField(Autor, blank=True, verbose_name="Autor", related_name='livros_autor')
     visibilidade = models.BooleanField(default=True, blank=True)
+    usuarios_favoritaram = models.ManyToManyField(User, blank=True, verbose_name="Usuario")
 
 
     ESCOLHAS_CATEGORIA = [

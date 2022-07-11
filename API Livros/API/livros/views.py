@@ -11,12 +11,19 @@ from django.core.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.models.query import QuerySet
+from django.http import Http404
+
 
 class LivroViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
-    serializer_class = LivroSerializer
     queryset = Livro.objects.all()
-    
+    serializer_class = LivroSerializer
+
+    def get_permissions(self):
+        if self.action == "list" or self.action == "retrieve":
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
+
     def get_serializer(self, *args, **kwargs):
         if self.request.user.is_superuser:
             serializer_class = LivroAdminSerializer
@@ -40,16 +47,33 @@ class LivroViewSet(viewsets.ModelViewSet):
             queryset = queryset.all()
         return queryset
 
+    def listar_favoritos(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        queryset = queryset.filter(usuarios_favoritaram__pk=request.user.pk)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
-class LivroViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    queryset = Livro.objects.all()
-    serializer_class = LivroSerializer
+    def favoritar(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if not instance.visibilidade and not request.user.is_superuser:
+            raise Http404
+        if self.request.user not in instance.usuarios_favoritaram.all():
+            instance.usuarios_favoritaram.add(self.request.user)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
-    def get_permissions(self):
-        if self.action == "list" or self.action == "retrieve":
-            return [permissions.AllowAny()]
-        return [permissions.IsAuthenticated()]
+    def desfavoritar(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if not instance.visibilidade and not request.user.is_superuser:
+            raise Http404
+        if self.request.user in instance.usuarios_favoritaram.all():
+            instance.usuarios_favoritaram.remove(self.request.user)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         if request.user.is_superuser:
