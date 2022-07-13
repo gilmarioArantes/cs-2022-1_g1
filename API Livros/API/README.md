@@ -113,3 +113,20 @@ Com um DELETE deleta o livro com uuid especificado. Apenas administradores podem
 
 ### /editar-livro/_uuid-do-livro_/
 Com um PUT edita o livro em questão. Apenas administradores podem editar livros.
+
+## Livros Favoritos
+
+### /livros/favoritos/
+Com um GET lista os livros favoritos do usuário que está requisitando.
+
+### /livros/favoritar/_uuid-do-livro_/
+Com um PUT define o livro de uuid especificado como favorito do usuário que fez a requisição.
+
+### /livros/desfavoritar/_uuid-do-livro_/
+Com um PUT desfavaorita o livro de uuid especificado caso o usuário que fez a requisição tenha aquele livro como favorito.
+
+## Ocultar Livros
+
+Nos endpoints de adicionar-livro e editar-livro, o campo "visibilidade" pode ser enviado no payload para controlar a visibilidade de determinado livro.
+Caso a visibilidade seja True, o livro fica visível a todos os usuários da plataforma.
+Caso a visibilidade seja False, o livro fica oculto de usuários não-administradores.

@@ -55,11 +55,11 @@ Desenvolvimento de uma API REST para gerenciamento de livros em uma biblioteca. 
 
 
 ### Cronograma:
-|Sprint|Atividade|Responsável|Início|Fim|Situação|Avaliação|
-|---|---|---|---|---|---|---|
-|1|Formação de Grupos. Definição de Temas|Equipe|03/06/2022|17/06/2022|Concluída|22/06/2022|
-|2|Implementação do Requisito 01|Equipe|18/06/2022|01/07/2022|Concluído|06/07/2022|
-|3|Implementação do Requisito 02|Equipe|02/07/2022|15/07/2022|A fazer|20/07/2022|
-|4|Implementação do Requisito 03|Equipe|16/07/2022|29/07/2022|A fazer|03/08/2022|
-|5|Implementação do Requisito 04|Equipe|30/07/2022|12/08/2022|A fazer|17/08/2022|
-|6|Implementação do Requisito 05|Equipe|13/08/2022|26/08/2022|A fazer|31/08/2022|
+| Sprint |Atividade| Responsável   | Início     | Fim        |Situação| Avaliação  |
+|--------|---|---------------|------------|------------|---|------------|
+| 1      |Formação de Grupos. Definição de Temas| Equipe        | 03/06/2022 | 17/06/2022 |Concluída| 22/06/2022 |
+| 2      |Implementação do Requisito 01| [Gabriel-Rezende](https://github.com/Gabriel-Rezende) | 18/06/2022 | 01/07/2022 |Concluída| 06/07/2022 |
+| 3      |Implementação do Requisito 04| [NathanCamposss](https://github.com/NathanCamposss) | 02/07/2022 | 15/07/2022 |Concluída| 20/07/2022 |
+| 4      |Implementação do Requisito 02| [PauloRobertoVieira](https://github.com/PauloRobertoVieira) | 16/07/2022 | 29/07/2022 |Concluída| 03/08/2022 |
+| 5      |Implementação do Requisito 03| [adrielmori](https://github.com/adrielmori)   | 30/07/2022 | 12/08/2022 |A fazer| 17/08/2022  |
+| 6      |Implementação do Requisito 05| [karlosdaniel451](https://github.com/karlosdaniel451) | 13/08/2022 | 26/08/2022 |A fazer| 31/08/2022 |
