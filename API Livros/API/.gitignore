@@ -1,0 +1,8 @@
+uploads
+.env
+venv
+.idea
+API Livros/.idea
+API/__pycache__
+livros/__pycache__
+autenticacao/__pycache__
